@@ -119,6 +119,8 @@ SELECT LENGTH(nome), nome FROM cursos;
 -- Adicionar coluna em tabela existente
 ALTER TABLE alunos ADD COLUMN data_nascimento DATE;
 
-UPDATE alunos SET data_nascimemto = "2000-06-28";
+UPDATE alunos SET data_nascimento = "2000-06-28";
 
-SELECT id, nome, data_nascimemto FROM alunos;
+SELECT id, nome, data_nascimento FROM alunos;
+
+UPDATE alunos SET data_nascimento = "2000-06-28" WHERE id = 1;
