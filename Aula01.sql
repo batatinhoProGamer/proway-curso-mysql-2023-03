@@ -120,3 +120,5 @@ SELECT LENGTH(nome), nome FROM cursos;
 ALTER TABLE alunos ADD COLUMN data_nascimento DATE;
 
 UPDATE alunos SET data_nascimemto = "2000-06-28";
+
+SELECT id, nome, data_nascimemto FROM alunos;
