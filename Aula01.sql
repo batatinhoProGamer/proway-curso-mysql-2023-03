@@ -137,3 +137,9 @@ SELECT CONCAT(nome, " ", data_nascimento) FROM alunos;
 SELECT nome, data_nascimento FROM alunos WHERE YEAR(data_nascimento) >= 2000 ORDER BY YEAR(data_nascimento) ASC, MONTH(data_nascimento) ASC, DAY(data_nascimento) ASC;
 
 SELECT id, nome, data_nascimento FROM alunos WHERE YEAR(data_nascimento) >= 1990 AND YEAR(data_nascimento) <= 1999;
+
+SELECT id, nome FROM cursos WHERE nome IN ("Java", "C#", "Python");
+
+SELECT id, nome, carga_horaria FROM cursos WHERE carga_horaria BETWEEN 40 AND 45;
+
+SELECT id, nome, carga_horaria FROM cursos WHERE carga_horaria NOT IN ("C#", "Python", "Java");
