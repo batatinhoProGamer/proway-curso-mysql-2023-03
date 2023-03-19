@@ -124,3 +124,16 @@ UPDATE alunos SET data_nascimento = "2000-06-28";
 SELECT id, nome, data_nascimento FROM alunos;
 
 UPDATE alunos SET data_nascimento = "2000-06-28" WHERE id = 1;
+UPDATE alunos SET data_nascimento = "2004-10-27" WHERE id = 2;
+UPDATE alunos SET data_nascimento = "1981-10-18" WHERE id = 3;
+UPDATE alunos SET data_nascimento = "2000-01-01" WHERE id = 4;
+UPDATE alunos SET data_nascimento = "1996-07-27" WHERE id = 5;
+UPDATE alunos SET data_nascimento = "2000-01-02" WHERE id = 6;
+
+SELECT DATE_FORMAT(data_nascimento, "%d/%m/%Y") AS "Data de nascimento" FROM alunos;
+SELECT YEAR(data_nascimento) FROM alunos;
+SELECT CONCAT(nome, " ", data_nascimento) FROM alunos;
+
+SELECT nome, data_nascimento FROM alunos WHERE YEAR(data_nascimento) >= 2000 ORDER BY YEAR(data_nascimento) ASC, MONTH(data_nascimento) ASC, DAY(data_nascimento) ASC;
+
+SELECT id, nome, data_nascimento FROM alunos WHERE YEAR(data_nascimento) >= 1990 AND YEAR(data_nascimento) <= 1999;
