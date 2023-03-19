@@ -172,3 +172,5 @@ SELECT * FROM cursos LIMIT 4, 2;
 SELECT nome, CASE WHEN YEAR(data_nascimento) BETWEEN 1980 and 1994 THEN "Geração Y"
     WHEN YEAR(data_nascimento) BETWEEN 1995 and 2009 THEN "Geração Z"
     WHEN YEAR(data_nascimento) BETWEEN 2010 and 2023 THEN "Geração Alpha" ELSE "Geração X" END AS "Geração" From alunos;
+
+-- https://miro.com/app/board/uXjVMeHZLE0=/?share_link_id=821951056661
