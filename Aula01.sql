@@ -143,3 +143,32 @@ SELECT id, nome FROM cursos WHERE nome IN ("Java", "C#", "Python");
 SELECT id, nome, carga_horaria FROM cursos WHERE carga_horaria BETWEEN 40 AND 45;
 
 SELECT id, nome, carga_horaria FROM cursos WHERE carga_horaria NOT IN ("C#", "Python", "Java");
+
+SELECT * FROM cursos LIMIT 2;
+-- +----+-------+---------------+
+-- | id | nome  | carga_horaria |
+-- +----+-------+---------------+
+-- |  1 | MySQL |            28 |
+-- |  2 | C#    |            40 |
+-- +----+-------+---------------+
+
+SELECT * FROM cursos LIMIT 1, 2;
+-- +----+--------+---------------+
+-- | id | nome   | carga_horaria |
+-- +----+--------+---------------+
+-- |  2 | C#     |            40 |
+-- |  3 | Python |            39 |
+-- +----+--------+---------------+
+
+SELECT * FROM cursos LIMIT 4, 2;
+-- +----+-----------+---------------+
+-- | id | nome      | carga_horaria |
+-- +----+-----------+---------------+
+-- |  5 | HTML, CSS |            32 |
+-- |  6 | React     |            52 |
+-- +----+-----------+---------------+
+
+-- Como se fosse um if
+SELECT nome, CASE WHEN YEAR(data_nascimento) BETWEEN 1980 and 1994 THEN "Geração Y"
+    WHEN YEAR(data_nascimento) BETWEEN 1995 and 2009 THEN "Geração Z"
+    WHEN YEAR(data_nascimento) BETWEEN 2010 and 2023 THEN "Geração Alpha" ELSE "Geração X" END AS "Geração" From alunos;
