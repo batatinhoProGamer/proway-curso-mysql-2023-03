@@ -174,3 +174,129 @@ SELECT nome, CASE WHEN YEAR(data_nascimento) BETWEEN 1980 and 1994 THEN "Geraç�
     WHEN YEAR(data_nascimento) BETWEEN 2010 and 2023 THEN "Geração Alpha" ELSE "Geração X" END AS "Geração" From alunos;
 
 -- https://miro.com/app/board/uXjVMeHZLE0=/?share_link_id=821951056661
+
+CREATE TABLE turmas(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_curso INT NOT NULL,
+    id_professor INT NOT NULL,
+
+    data_inicio DATE NOT NULL,
+    data_termino DATE NOT NULL,
+
+    FOREIGN KEY(id_curso) REFERENCES cursos(id),
+    FOREIGN KEY(id_professor) REFERENCES professores(id)
+);
+
+INSERT INTO turmas(id_curso, id_professor, data_inicio, data_termino) VALUES
+(1, 1, "2023-03-12", "2023-04-23"),
+(1,	1, "2023-03-12", "2023-04-16"),
+(2,	1, "2023-05-01", "2023-07-10"),
+(3,	2, "2024-01-01", "2024-02-10"),
+(4,	2, "2022-01-01", "2022-12-31"),
+(5,	3, "2023-04-01", "2023-04-10"),
+(6,	4, "2024-01-10", "2024-02-10"),
+(5,	5, "2023-05-11", "2023-05-20"),
+(5,	3, "2023-08-01", "2023-08-20");
+
+
+SELECT 
+    t.id,
+    p.nome,
+    t.data_inicio
+    FROM turmas AS t
+    INNER JOIN professores AS p ON (p.id = t.id_professor);
+
+SELECT 
+    cursos.nome AS "Curso",
+    turmas.data_inicio AS "Data de inicio",
+    turmas.data_termino AS "Data de término"
+    FROM turmas
+    INNER JOIN cursos ON (cursos.id = turmas.id_curso);
+
+SELECT
+    LOWER(professores.nome) AS "Professor",
+    UPPER(cursos.nome) AS "Curso",
+    turmas.data_inicio AS "Data inicio",
+    turmas.data_termino AS "Data término"
+    FROM turmas
+    INNER JOIN professores ON(professores.id = turmas.id_professor)
+    INNER JOIN cursos on(cursos.id = turmas.id_curso);
+
+SELECT
+    CONCAT(
+        professores.nome, " => ",
+        cursos.nome, "(",
+        cursos.carga_horaria, ")"
+    ) AS "Turmas"
+    FROM professores
+    INNER JOIN turmas ON (professores.id = turmas.id_professor)
+    INNER JOIN cursos ON (cursos.id = turmas.id_curso);
+
+SELECT
+    CONCAT(
+        professores.nome, SPACE(30 - LENGTH(professores.nome)), " => ",
+        cursos.nome, SPACE(30 - LENGTH(cursos.nome)), "(",
+        cursos.carga_horaria, ")"
+    ) AS "Turmas"
+    FROM professores
+    INNER JOIN turmas ON (professores.id = turmas.id_professor)
+    INNER JOIN cursos ON (cursos.id = turmas.id_curso);
+
+SELECT SUBSTRING(nome, 1, 2) FROM cursos;
+
+CREATE TABLE mercadorias(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    nome VARCHAR(50) NOT NULL
+);
+
+INSERT INTO mercadorias (nome) VALUES
+("   Nescau   "),
+("Nescau"),
+("Nescau  "),
+("Nescau cereal"),
+("O nescau de todo dia"),
+("Nescal com L"),
+("Uma mercadoria que termina com nescau");
+
+SELECT * FROM mercadorias WHERE nome LIKE "Nescau%";
+
+SELECT * FROM mercadorias WHERE nome LIKE "%Nescau";
+
+SELECT * FROM mercadorias WHERE nome LIKE "%Nescau%";
+
+SELECT COUNT(*) FROM mercadorias WHERE nome LIKE "%Nescau%";
+
+SELECT REPLACE(nome, "Nescal", "Nescau") FROM mercadorias;
+
+SELECT LTRIM(nome), LENGTH(LTRIM(nome)) FROM mercadorias;
+
+SELECT RTRIM(nome), LENGTH(RTRIM(nome)) FROM mercadorias;
+
+SELECT TRIM(nome), LENGTH(TRIM(nome)) FROM mercadorias;
+
+ALTER TABLE mercadorias ADD COLUMN data_vencimento DATE;
+
+ALTER TABLE mercadorias DROP COLUMN data_vencimento;
+
+SHOW CREATE TABLE mercadorias;
+
+ALTER TABLE mercadorias ADD COLUMN data_vencimento DATE;
+ALTER TABLE mercadorias ADD COLUMN estoque INT FIRST;
+ALTER TABLE mercadorias ADD COLUMN valor_unitario FLOAT(5, 2) AFTER nome;
+
+ALTER TABLE mercadorias ALTER data_vencimento SET DEFAULT "2023-04-05";
+
+-- TODO
+-- ALTER TABLE mercadorias ALTER data_vencimento SET DEFAULT DATE(DATE_ADD(NOW(), INTERVAL 10 DAY));
+
+UPDATE mercadorias SET data_vencimento = DATE(DATE_ADD(NOW(), INTERVAL 10 DAY));
+
+INSERT INTO mercadorias (nome, estoque, valor_unitario) VALUE ("Toddy", 3, 13.50);
+
+ALTER TABLE mercadorias ALTER data_vencimento DROP DEFAULT;
+
+INSERT INTO mercadorias (nome, estoque, valor_unitario, data_vencimento) VALUE("Todinho", 1, 5.00, "2024-01-01");
+
+ALTER TABLE mercadorias MODIFY nome VARCHAR(75);
+
+ALTER TABLE mercadorias CHANGE valor_unitario preco_unitario FLOAT(5, 2);
