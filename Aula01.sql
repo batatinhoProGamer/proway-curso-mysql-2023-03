@@ -214,6 +214,7 @@ SELECT
     INNER JOIN cursos ON (cursos.id = turmas.id_curso);
 
 SELECT
+    turmas.id,
     LOWER(professores.nome) AS "Professor",
     UPPER(cursos.nome) AS "Curso",
     turmas.data_inicio AS "Data inicio",
@@ -300,3 +301,92 @@ INSERT INTO mercadorias (nome, estoque, valor_unitario, data_vencimento) VALUE("
 ALTER TABLE mercadorias MODIFY nome VARCHAR(75);
 
 ALTER TABLE mercadorias CHANGE valor_unitario preco_unitario FLOAT(5, 2);
+
+ALTER TABLE mercadorias RENAME TO mercadorias_do_mercado;
+
+CREATE TABLE alunos_turmas(
+    id INT PRIMARY KEY AUTO_INCREMENT,
+    id_turma INT NOT NULL,
+    id_aluno INT NOT NULL,
+    FOREIGN KEY(id_turma) REFERENCES turmas(id),
+    FOREIGN KEY(id_aluno) REFERENCES alunos(id)
+);
+
+INSERT INTO alunos_turmas (id_turma, id_aluno) VALUES
+(1, 1),
+(1, 2),
+(1, 3),
+(1, 4),
+(1, 5),
+(2, 2),
+(3, 5),
+(3, 1),
+(4, 4),
+(7, 1),
+(8, 1),
+(6, 5),
+(6, 4),
+(6, 1);
+
+SELECT
+    alunos_turmas.id AS "Turma",
+    cursos.nome AS "Curso",
+    alunos.nome AS "Aluno"
+    FROM alunos_turmas
+    INNER JOIN turmas ON(turmas.id = alunos_turmas.id_turma)
+    INNER JOIN alunos ON(alunos.id = alunos_turmas.id_aluno)
+    INNER JOIN cursos ON(cursos.id = turmas.id_curso)
+    ORDER BY alunos_turmas.id;
+
+SELECT
+    alunos.nome AS "Aluno",
+    professores.nome AS "Professor"
+    FROM alunos_turmas
+    INNER JOIN turmas ON(turmas.id = alunos_turmas.id_turma)
+    INNER JOIN alunos ON(alunos.id = alunos_turmas.id_aluno)
+    INNER JOIN professores ON(professores.id = turmas.id_professor);
+
+SELECT
+    alunos.nome AS "Aluno",
+    cursos.nome AS "Curso",
+    turmas.data_inicio AS "Data de inicio",
+    turmas.data_termino AS "Data de término"
+    FROM alunos_turmas
+    INNER JOIN turmas ON(turmas.id = alunos_turmas.id_turma)
+    INNER JOIN alunos ON(alunos.id = alunos_turmas.id_aluno)
+    INNER JOIN cursos ON(cursos.id = turmas.id_curso)
+    ORDER BY turmas.data_inicio;
+
+ALTER TABLE alunos ADD COLUMN idade TINYINT;
+
+ALTER TABLE alunos ADD CONSTRAINT CHECK_AlunoIdade CHECK (Idade >= 14);
+
+INSERT INTO alunos (nome, data_nascimento, idade) VALUES ("Pedro de Silva", "2009-01-01", 14);
+
+-- CREATE TABLE `alunos` (
+--     `id` int NOT NULL AUTO_INCREMENT,
+--     `nome` varchar(100) NOT NULL,
+--     `data_nascimento` date DEFAULT NULL,
+--     `idade` tinyint DEFAULT NULL,
+--     PRIMARY KEY (`id`),
+--     CONSTRAINT `CHECK_AlunoIdade` CHECK ((`Idade` >= 14)));
+
+ALTER TABLE alunos DROP CONSTRAINT CHECK_AlunoIdade;
+
+ALTER TABLE professores ADD COLUMN cpf CHAR(14);
+
+UPDATE professores SET cpf = "429.745.800-41" WHERE id = 1;
+UPDATE professores SET cpf = "841.589.320-50" WHERE id = 2;
+UPDATE professores SET cpf = "558.080.170-09" WHERE id = 3;
+UPDATE professores SET cpf = "752.776.250-03" WHERE id = 4;
+UPDATE professores SET cpf = "474.368.310-62" WHERE id = 5;
+
+INSERT INTO professores (nome, valor_hora, cpf) VALUE ("Luiz com Z", 200.10, "606.689.490-07");
+INSERT INTO professores (nome, valor_hora, cpf) VALUE ("Joana", 197.50, "474.368.310-62");
+
+ALTER TABLE professores ADD CONSTRAINT UniqueProfessorCpf UNIQUE (cpf);
+ALTER TABLE professores ADD UNIQUE (cpf);
+
+INSERT INTO professores (nome, valor_hora, cpf) VALUE ("Joana", 197.50, "474.368.310-62");
+
+ALTER TABLE professores DROP CONSTRAINT UniqueProfessorCpf;
