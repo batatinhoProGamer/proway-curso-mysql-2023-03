@@ -47,7 +47,7 @@ SELECT MIN(preco_unitario) FROM estoque;
 
 SELECT MAX(quantidade) FROM estoque;
 
-SELECT produto, quantidade, preco_unitario FROM estoque;
+SELECT produto, quantidade, preco_unitario, preco_unitario * quantidade AS "Total" FROM estoque;
 
 SELECT SUM(quantidade * preco_unitario) FROM estoque;
 
