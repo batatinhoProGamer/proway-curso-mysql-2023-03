@@ -390,3 +390,55 @@ ALTER TABLE professores ADD UNIQUE (cpf);
 INSERT INTO professores (nome, valor_hora, cpf) VALUE ("Joana", 197.50, "474.368.310-62");
 
 ALTER TABLE professores DROP CONSTRAINT UniqueProfessorCpf;
+
+-- Fazer a consulta limpa (precisa do ORDER BY limpo também)
+SELECT DISTINCT TRIM(nome) FROM mercadorias_do_mercado ORDER BY TRIM(nome);
+
+TRUNCATE TABLE mercadorias_do_mercado;
+ALTER TABLE mercadorias_do_mercado RENAME TO mercadorias;
+
+ALTER TABLE mercadorias DROP COLUMN data_vencimento;
+ALTER TABLE mercadorias ADD COLUMN categoria VARCHAR(25);
+
+ALTER TABLE mercadorias ADD COLUMN corredor INT;
+INSERT INTO mercadorias (nome, estoque, preco_unitario, categoria, corredor) VALUES
+("Qboa", 19, 4.79, "Limpeza", 4),
+("Ovo", 30, 0.83, "Derivados", 1),
+("Suco de uva", 100, 17.00, "Bebida", 2),
+("Queijo Colonial", 2, 30.00, "Derivados", 1),
+("Calabresa com macarrão", 3, 15.00, "PF", 3),
+("Arroz", 3, 13.99, "Grãos", 3),
+("Pão Sírio", 1, 14.99, "Pão", 2),
+("Lasanha com Z", 1, 12.99, "PF", 3),
+("Baguete", 3, 5.99, "Pão", 2),
+("Monster", 6, 8.50, "Bebida", 2),
+("Ajax", 6, 10.99, "Limpeza", 4),
+("Alcatra com feijão/arroz", 1, 72.00, "PF", 3),
+("Vinho", 3, 13.00, "Bebida", 2);
+
+SELECT * FROM mercadorias;
+
+-- Agrupar por categoria
+SELECT categoria AS "Categoria", SUM(preco_unitario) AS "Total dos preços unitários" FROM mercadorias GROUP BY categoria ORDER BY categoria;
+
+SELECT categoria AS "Categoria", MIN(preco_unitario) FROM mercadorias GROUP BY categoria;
+
+SELECT nome, preco_unitario * estoque AS "Preço" FROM mercadorias;
+
+SELECT categoria, SUM(preco_unitario * estoque) FROM mercadorias GROUP BY categoria;
+
+SELECT * FROM mercadorias ORDER BY corredor, categoria;
+
+SELECT categoria, SUM(preco_unitario * estoque) FROM mercadorias WHERE corredor IN(2, 3) GROUP BY categoria;
+
+SELECT categoria, SUM(preco_unitario * estoque) FROM mercadorias WHERE corredor IN(2, 3) GROUP BY categoria HAVING SUM(preco_unitario * estoque) > 100;
+
+SELECT categoria, COUNT(*) FROM mercadorias GROUP by categoria;
+
+-- View aumenta performance (tabela pré-pronta)
+CREATE VIEW ListaMercadorias AS SELECT nome, categoria, preco_unitario * estoque FROM mercadorias;
+
+-- Json
+SELECT CONCAT("{\n""nome"": """, nome, """, ""estoque"": ", estoque, "\n}") FROM mercadorias;
+SELECT JSON_OBJECT("nome", nome, "estoque", estoque) FROM mercadorias;
+SELECT JSON_ARRAYAGG(JSON_OBJECT("nome", nome, "estoque", estoque)) AS "Produtos" FROM mercadorias;
